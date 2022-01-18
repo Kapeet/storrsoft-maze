@@ -63,16 +63,15 @@ class MazeDrawer {
     }
 
     drawPrizes() {
-        console.log(this.prizes);
         if (!this.prizes) {
             console.log('prizes are null!');
             return;
         }
         // let prizeSize, rect;
-        this.prizes.coords.map((coordinates, index) => {
+        this.prizes.coords.forEach((coordinates, index) => {
             const prizeSize = Math.min(this.cellWidth, this.cellHeight) * 0.75;
             const rect = this.calculateCellRect(coordinates);
-            if (index % 2 == 0)
+            if (index % 2 === 0)
             {
                 this.ctx.drawImage(this.prizes.img[0],  rect.left + (rect.width - prizeSize) / 2, rect.top + (rect.height - prizeSize) / 2, prizeSize, prizeSize);
             }

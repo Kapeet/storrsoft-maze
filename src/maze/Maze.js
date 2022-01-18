@@ -2,7 +2,12 @@ import {mazeGenerator} from "@miketmoore/maze-generator";
 import {coordFactory} from "@miketmoore/maze-generator/dist/coord";
 
 function getRandomCoordinate(max) {
-    return Math.floor((Math.random() * max));
+    let randomCoordinate;
+    //keep randomizing the number until it doesn't show up in the start or goal area.
+    do {
+        randomCoordinate = Math.floor((Math.random() * max));
+    } while (randomCoordinate <= 0 || randomCoordinate >= max)
+    return randomCoordinate;
 }
 
 const NUMBER_OF_PRIZES = parseInt(process.env.REACT_APP_PRIZES);
@@ -26,6 +31,9 @@ class Maze {
 
     }
 
+    claimPrize(index) {
+
+    }
     get rows() {
         return this._rows;
     }

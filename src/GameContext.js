@@ -80,7 +80,14 @@ const reducer = (state, action) => {
                 start: action.payload.maze.start,
                 goal: action.payload.maze.goal,
                 round: state.round + 1,
-                betweenRounds: false
+                betweenRounds: false,
+                prizes: action.payload.maze.prizes
+            }
+        }
+        case 'claimPrize': {
+            return {
+                ...state,
+                prizes: action.payload.maze.prizes
             }
         }
         default:
@@ -121,6 +128,18 @@ export const GameProvider = ({children}) => {
                         playLevelMusic();
                     }, 2300)
                 }
+                else
+                {
+
+                    for(let i = 0; i < state.prizes.length ; i++)
+                    {
+                        if (nextCell.toString() === state.prizes[i].toString())
+                        {
+                            console.log("yes"+i);
+                        }
+                    }
+                }
+                
             }
         }
 
