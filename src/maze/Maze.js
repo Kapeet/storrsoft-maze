@@ -21,12 +21,25 @@ class Maze {
         this._cols = columns;
         this._start = coordFactory(0, 0);
         this._goal = coordFactory(rows - 1, columns - 1);
-        this._prizes = [coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns))];
+        // this._prizes = [coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns))];
         this._prizes = [];
-        for (let i = 0; i < NUMBER_OF_PRIZES; i++)
+        if (NUMBER_OF_PRIZES)
         {
-            this._prizes.push(coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns)));
-
+            let previousRow, previousColumn;
+            for (let i = 0; i < NUMBER_OF_PRIZES; i++)
+            {
+                let randomRow, randomColumn;
+                //keep randomizing the coordinates if they are indentical to the previous coordinates.
+                do {
+                    randomRow = getRandomCoordinate(rows);
+                    randomColumn = getRandomCoordinate(columns);
+                }
+                while (randomRow === previousRow && randomColumn === previousColumn)
+                this._prizes.push(coordFactory(randomRow,randomColumn));
+                previousRow = randomRow;
+                previousColumn = randomColumn;
+    
+            }
         }
 
     }
