@@ -5,7 +5,8 @@ import MazeDrawer from "./MazeDrawer";
 import {useWindowSize} from "@react-hook/window-size";
 import useImage from "use-image";
 import logoSrc from './logo.svg';
-import prizeSrc from './lollipop.svg';
+import lolipopImage from './lollipop.svg';
+import iceCreamImage from './ice_cream.svg';
 import useInterval from "@use-it/interval";
 
 const Board = () => {
@@ -16,7 +17,8 @@ const Board = () => {
     const [width, height] = useWindowSize();
     const [shouldDraw, setShouldDraw] = useState(false);
     const [logo] = useImage(logoSrc)    
-    const [prizesImage] = useImage(prizeSrc);    
+    const [prizeImage] = useImage(lolipopImage);
+    const [prizeImage2] = useImage(iceCreamImage);    
     useEffect(() => {
         const handleResize = () => {
             const rect = containerRef.current.getBoundingClientRect();
@@ -40,7 +42,7 @@ const Board = () => {
         if (!maze) {
             return;
         }
-        const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, new Object({coords: prizes, img: prizesImage}));
+        const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, new Object({coords: prizes, img: [prizeImage, prizeImage2]}));
         mazeDrawer.draw();
 
     }, [shouldDraw, maze, logo, currentCell, start, goal, showGoal, prizes])

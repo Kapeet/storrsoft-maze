@@ -69,10 +69,17 @@ class MazeDrawer {
             return;
         }
         // let prizeSize, rect;
-        this.prizes.coords.map(coordinates => {
+        this.prizes.coords.map((coordinates, index) => {
             const prizeSize = Math.min(this.cellWidth, this.cellHeight) * 0.75;
             const rect = this.calculateCellRect(coordinates);
-            this.ctx.drawImage(this.prizes.img,  rect.left + (rect.width - prizeSize) / 2, rect.top + (rect.height - prizeSize) / 2, prizeSize, prizeSize);
+            if (index % 2 == 0)
+            {
+                this.ctx.drawImage(this.prizes.img[0],  rect.left + (rect.width - prizeSize) / 2, rect.top + (rect.height - prizeSize) / 2, prizeSize, prizeSize);
+            }
+            else
+            {
+                this.ctx.drawImage(this.prizes.img[1],  rect.left + (rect.width - prizeSize) / 2, rect.top + (rect.height - prizeSize) / 2, prizeSize, prizeSize);
+            }
         })
         
     }

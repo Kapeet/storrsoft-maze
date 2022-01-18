@@ -17,12 +17,12 @@ class Maze {
         this._start = coordFactory(0, 0);
         this._goal = coordFactory(rows - 1, columns - 1);
         this._prizes = [coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns))];
-        // this._prizes = [1];
-        // for (let i = 0; i < NUMBER_OF_PRIZES; i++)
-        // {
-        //     _prizes.push(coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns)));
+        this._prizes = [];
+        for (let i = 0; i < NUMBER_OF_PRIZES; i++)
+        {
+            this._prizes.push(coordFactory(getRandomCoordinate(rows),getRandomCoordinate(columns)));
 
-        // }
+        }
 
     }
 
