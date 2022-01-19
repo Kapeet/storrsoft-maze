@@ -35,10 +35,9 @@ class Maze {
                     randomColumn = getRandomCoordinate(columns);
                 }
                 while (randomRow === previousRow && randomColumn === previousColumn)
-                this._prizes.push(coordFactory(randomRow,randomColumn));
+                this._prizes.push({coordinates: coordFactory(randomRow,randomColumn), isClaimed: false});
                 previousRow = randomRow;
                 previousColumn = randomColumn;
-    
             }
         }
 

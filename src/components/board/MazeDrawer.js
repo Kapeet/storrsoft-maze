@@ -68,10 +68,15 @@ class MazeDrawer {
             return;
         }
         // let prizeSize, rect;
-        this.prizes.coords.forEach((coordinates, index) => {
+        // console.log(this.prizes);
+        this.prizes.objects.forEach((prize, index) => {
             const prizeSize = Math.min(this.cellWidth, this.cellHeight) * 0.75;
-            const rect = this.calculateCellRect(coordinates);
-            if (index % 2 === 0)
+            const rect = this.calculateCellRect(prize.coordinates);
+            if (prize.isClaimed)
+            {
+                this.drawText('+100',rect);
+            }
+            else if (index % 2 === 0)
             {
                 this.ctx.drawImage(this.prizes.img[0],  rect.left + (rect.width - prizeSize) / 2, rect.top + (rect.height - prizeSize) / 2, prizeSize, prizeSize);
             }
@@ -96,11 +101,16 @@ class MazeDrawer {
         }
 
         const rect = this.calculateCellRect(this.goal);
+        this.drawText('G', rect);
+    }
+
+    drawText(text, rect) {
+        
         this.ctx.font = `${rect.height * 0.75}px "Joystix"`;
         this.ctx.textBaseline = 'top';
         this.ctx.fillStyle = 'yellow';
-        const textWidth = Math.min(this.ctx.measureText('G').width, rect.width * 0.75);
-        this.ctx.fillText('G', rect.left + (rect.width - textWidth) / 2, rect.top + rect.height * 0.125, textWidth);
+        const textWidth = Math.min(this.ctx.measureText(text).width, rect.width * 0.75);
+        this.ctx.fillText(text, rect.left + (rect.width - textWidth) / 2, rect.top + rect.height * 0.125, textWidth);
     }
 }
 

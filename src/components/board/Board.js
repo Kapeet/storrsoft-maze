@@ -42,7 +42,7 @@ const Board = () => {
         if (!maze) {
             return;
         }
-        const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, {coords: prizes, img: [prizeImage, prizeImage2]});
+        const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, {objects: prizes, img: [prizeImage, prizeImage2]});
         mazeDrawer.draw();
 
     }, [shouldDraw, maze, logo, currentCell, start, goal, showGoal, prizes])

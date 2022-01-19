@@ -87,7 +87,8 @@ const reducer = (state, action) => {
         case 'claimPrize': {
             return {
                 ...state,
-                prizes: action.payload.maze.prizes
+                prizes: action.payload.prizes,
+                score: action.payload.score
             }
         }
         default:
@@ -104,6 +105,37 @@ export const GameProvider = ({children}) => {
 
     const isPlaying = !!state.maze && state.time > 0;
 
+    const checkIfPrizeClaimed = (nextCell) => {
+        let newPrizes = [];
+        for(let i = 0; i < state.prizes.length ; i++)
+        {
+            if (nextCell.toString() === state.prizes[i].coordinates.toString())
+            {
+                console.log(state.prizes);
+                for (let j = 0; j < state.prizes.length; j++)
+                {
+                    console.log(state.prizes[i].coordinates);
+                    if (i === j) {
+                        newPrizes.push({
+                            coordinates: state.prizes[j].coordinates,
+                            isClaimed: true
+                        });
+                    }
+                    else
+                    {
+                        newPrizes.push({
+                            coordinates: state.prizes[j].coordinates,
+                            isClaimed: state.prizes[j].isClaimed ? true : false
+                        });
+                    }
+                }
+                console.log(newPrizes);
+                //set isClaimed to true
+                
+                dispatch({type: 'claimPrize', payload: {prizes: newPrizes, score: state.score + 100}});
+            }
+        }
+    }
     useInterval(() => {
         dispatch({type: 'decrementTime'});
     }, isPlaying && !state.betweenRounds ? 1000 : null);
@@ -130,14 +162,7 @@ export const GameProvider = ({children}) => {
                 }
                 else
                 {
-
-                    for(let i = 0; i < state.prizes.length ; i++)
-                    {
-                        if (nextCell.toString() === state.prizes[i].toString())
-                        {
-                            console.log("yes"+i);
-                        }
-                    }
+                    checkIfPrizeClaimed(nextCell);
                 }
                 
             }
