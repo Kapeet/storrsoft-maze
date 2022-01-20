@@ -4,7 +4,7 @@ import useSound from "use-sound";
 import Maze from "./maze/Maze";
 import levelMusic from './audio/maze.mp3';
 import levelEndMusic from './audio/level_end.mp3';
-
+import { useWindowHeight, useWindowWidth } from "@react-hook/window-size";
 const ROWS = parseInt(process.env.REACT_APP_ROWS);
 const COLUMNS = parseInt(process.env.REACT_APP_COLUMNS);
 const ROUND_TIME = parseInt(process.env.REACT_APP_ROUND_TIME);
@@ -25,6 +25,7 @@ const INITIAL_STATE = {
     highScore: 0,
     betweenRounds: false,
     prizes: [],
+    isPortraitMode: false,
 }
 
 const GameContext = createContext({
@@ -36,6 +37,12 @@ export const useGameContext = () => useContext(GameContext);
 
 const reducer = (state, action) => {
     switch (action.type) {
+        case 'portraitMode': {
+            return {
+                ...state,
+                isPortraitMode: action.payload.isPortraitMode
+            }
+        }
         case 'startGame': {
             return {
                 ...state,
@@ -87,6 +94,7 @@ const reducer = (state, action) => {
         case 'claimPrize': {
             return {
                 ...state,
+                time: action.payload.time,
                 prizes: action.payload.prizes,
                 score: action.payload.score
             }
@@ -111,10 +119,8 @@ export const GameProvider = ({children}) => {
         {
             if (nextCell.toString() === state.prizes[i].coordinates.toString())
             {
-                console.log(state.prizes);
                 for (let j = 0; j < state.prizes.length; j++)
                 {
-                    console.log(state.prizes[i].coordinates);
                     if (i === j) {
                         newPrizes.push({
                             coordinates: state.prizes[j].coordinates,
@@ -129,19 +135,37 @@ export const GameProvider = ({children}) => {
                         });
                     }
                 }
-                console.log(newPrizes);
-                //set isClaimed to true
-                
-                dispatch({type: 'claimPrize', payload: {prizes: newPrizes, score: state.score + 100}});
+                dispatch({type: 'claimPrize', payload: {prizes: newPrizes, score: state.score + 100, time: state.time + 10}});
             }
         }
     }
+
+    const width = useWindowWidth();
+    const height = useWindowHeight();
+    
+    useEffect(() => {
+        if (height > width)
+        {
+            dispatch({type: 'portraitMode', payload: {isPortraitMode: true}});
+        }
+        else
+        {
+            dispatch({type: 'portraitMode', payload: {isPortraitMode: false}});
+        }
+    },[width,height])
     useInterval(() => {
-        dispatch({type: 'decrementTime'});
+        if (!state.isPortraitMode)
+        {
+            dispatch({type: 'decrementTime'});
+        }
     }, isPlaying && !state.betweenRounds ? 1000 : null);
 
     useEffect(() => {
         const onKeyDown = ({key}) => {
+            if (state.isPortraitMode)
+            {
+                return;
+            }
             if (key === 'Enter' && !isPlaying) {
                 playLevelMusic();
                 dispatch({type: 'startGame', payload: {maze: new Maze(ROWS, COLUMNS)}})

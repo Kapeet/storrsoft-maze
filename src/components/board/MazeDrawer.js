@@ -23,11 +23,12 @@ class MazeDrawer {
 
         this.drawWalls();
 
+        this.drawPrizes();
+        
         this.drawLogo();
 
         this.drawGoal();
 
-        this.drawPrizes();
     }
 
     drawWalls() {

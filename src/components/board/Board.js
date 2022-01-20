@@ -8,9 +8,8 @@ import logoSrc from './logo.svg';
 import lolipopImage from './lollipop.svg';
 import iceCreamImage from './ice_cream.svg';
 import useInterval from "@use-it/interval";
-
 const Board = () => {
-    const {maze, currentCell, start, goal, prizes} = useGameContext();
+    const {maze, currentCell, start, goal, prizes, isPortraitMode} = useGameContext();
     const [showGoal, setShowGoal] = useState(true);
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
@@ -18,7 +17,8 @@ const Board = () => {
     const [shouldDraw, setShouldDraw] = useState(false);
     const [logo] = useImage(logoSrc)    
     const [prizeImage] = useImage(lolipopImage);
-    const [prizeImage2] = useImage(iceCreamImage);    
+    const [prizeImage2] = useImage(iceCreamImage);
+    
     useEffect(() => {
         const handleResize = () => {
             const rect = containerRef.current.getBoundingClientRect();
@@ -42,14 +42,17 @@ const Board = () => {
         if (!maze) {
             return;
         }
-        const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, {objects: prizes, img: [prizeImage, prizeImage2]});
-        mazeDrawer.draw();
+        if (!isPortraitMode)
+        {
+            const mazeDrawer = new MazeDrawer(canvasRef.current, maze, logo, currentCell, showGoal && goal, {objects: prizes, img: [prizeImage, prizeImage2]});
+            mazeDrawer.draw();
+        }
 
     }, [shouldDraw, maze, logo, currentCell, start, goal, showGoal, prizes])
 
     return (
         <div ref={containerRef} className={styles.root}>
-            <canvas className={styles.canvas} ref={canvasRef}/>
+            {isPortraitMode ? <h1 ref={canvasRef}></h1> :<canvas className={styles.canvas} ref={canvasRef}/>}
         </div>
     )
 };

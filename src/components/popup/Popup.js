@@ -3,13 +3,13 @@ import styles from './Popup.module.css';
 import {useGameContext} from "../../GameContext";
 
 const Notification = () => {
-    const {isPlaying, maze} = useGameContext();
+    const {isPlaying, maze, isPortraitMode} = useGameContext();
     return (
-        (!isPlaying) &&
+        (!isPlaying && !isPortraitMode) ?
         <div className={styles.root}>
             {maze ? 'GAME OVER' : null}<br/>
             PUSH START BUTTON
-        </div>
+        </div> : (isPortraitMode) ? <div className={styles.root}>PLEASE TILT YOUR SCREEN!</div> : ''
     );
 }
 

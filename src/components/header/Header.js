@@ -2,7 +2,7 @@ import styles from './Header.module.css';
 import {useGameContext} from "../../GameContext";
 
 const Header = () => {
-    const {time, round, score, highScore} = useGameContext();
+    const {time, round, score, highScore, isPortraitMode} = useGameContext();
     const formatTime = () => {
         return (time !== undefined)
             ? time.toString().padStart(2, ' ')
@@ -10,6 +10,7 @@ const Header = () => {
     };
 
     return (
+            (!isPortraitMode) &&
         <header>
             <div className={styles.row}>
                 <p>Welcome to the StorrSoft maze!</p>
