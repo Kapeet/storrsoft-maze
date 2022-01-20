@@ -140,6 +140,26 @@ export const GameProvider = ({children}) => {
         }
     }
 
+    const checkIfPlayerMoved = (key) => {
+        const nextCell = state.maze.tryMove(state.currentCell, KEY_DIRECTIONS[key]);
+        if (!nextCell) {
+            return;
+        }
+        dispatch({type: 'move', payload: {nextCell, points: state.round * 10}});
+        if (nextCell.toString() === state.goal.toString()) {
+            dispatch({type: 'finishLevel'});
+            stopLevelMusic();
+            playLevelEndMusic();
+            setTimeout(() => {
+                dispatch({type: 'roundUp', payload: {maze: new Maze(ROWS, COLUMNS)}});
+                playLevelMusic();
+            }, 2300)
+        }
+        else
+        {
+            checkIfPrizeClaimed(nextCell);
+        }
+    }
     const width = useWindowWidth();
     const height = useWindowHeight();
     
@@ -160,37 +180,20 @@ export const GameProvider = ({children}) => {
         }
     }, isPlaying && !state.betweenRounds ? 1000 : null);
 
-    useEffect(() => {
-        const onKeyDown = ({key}) => {
-            if (state.isPortraitMode)
-            {
-                return;
-            }
-            if (key === 'Enter' && !isPlaying) {
-                playLevelMusic();
-                dispatch({type: 'startGame', payload: {maze: new Maze(ROWS, COLUMNS)}})
-            } else if (Object.keys(KEY_DIRECTIONS).indexOf(key) > -1 && isPlaying && !state.betweenRounds) {
-                const nextCell = state.maze.tryMove(state.currentCell, KEY_DIRECTIONS[key]);
-                if (!nextCell) {
-                    return;
-                }
-                dispatch({type: 'move', payload: {nextCell, points: state.round * 10}});
-                if (nextCell.toString() === state.goal.toString()) {
-                    dispatch({type: 'finishLevel'});
-                    stopLevelMusic();
-                    playLevelEndMusic();
-                    setTimeout(() => {
-                        dispatch({type: 'roundUp', payload: {maze: new Maze(ROWS, COLUMNS)}});
-                        playLevelMusic();
-                    }, 2300)
-                }
-                else
-                {
-                    checkIfPrizeClaimed(nextCell);
-                }
-                
-            }
+    const onKeyDown = ({key}) => {
+        if (state.isPortraitMode)
+        {
+            return;
         }
+        if (key === 'Enter' && !isPlaying) {
+            playLevelMusic();
+            dispatch({type: 'startGame', payload: {maze: new Maze(ROWS, COLUMNS)}})
+        } else if (Object.keys(KEY_DIRECTIONS).indexOf(key) > -1 && isPlaying && !state.betweenRounds) {
+            checkIfPlayerMoved(key);
+            
+        }
+    }
+    useEffect(() => {        
 
         window.addEventListener('keydown', onKeyDown);
 
@@ -203,12 +206,20 @@ export const GameProvider = ({children}) => {
         }
     }, [state, stopLevelMusic])
 
+    let arrowButtons = Object.keys(KEY_DIRECTIONS).map((key, index) => {
+        let direction = Object.values(KEY_DIRECTIONS)[index];
+    return <button key={key} className={"ArrowButton "+key} onClick={() => checkIfPlayerMoved(key)}>Move {direction}</button>
+    });
+        
     return (
         <GameContext.Provider value={{
             ...state,
             isPlaying,
         }}>
             {children}
+            {state.isPlaying && !state.isPortraitMode ? arrowButtons : (!state.isPortraitMode) ? <button className="StartButton" onClick={() => {
+            playLevelMusic();
+            dispatch({type: 'startGame', payload: {maze: new Maze(ROWS, COLUMNS)}})}}>Start!</button> : ''}
         </GameContext.Provider>
     )
 }

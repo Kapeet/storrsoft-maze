@@ -24,3 +24,33 @@ p {
 * {
     box-sizing: border-box;
 }
+
+
+.ArrowButton {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 50%;
+}
+
+.ArrowDown {
+    top: 10%;
+}
+.ArrowLeft {
+    display: flex;
+    right: 55%;
+    top: 5%;
+}
+
+.ArrowRight {
+    top: 5%;
+    right: 45%;
+}
+
+.StartButton {
+    position: absolute;
+    top: 60%;
+    right: 25%;
+    width: 50%;
+    height: 25%;
+}
