@@ -27,24 +27,46 @@ p {
 
 
 .ArrowButton {
-    display: flex;
-    position: absolute;
-    top: 0;
-    right: 50%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    place-items: center;
+    position: fixed;
+    bottom: 0%;
+    width: 100%;        
+    justify-content: center;
 }
 
+button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    font-weight: 800;
+    white-space: nowrap;
+    border: 2px solid white;
+    border-radius: 25px;
+}
+
+.ArrowUp {
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
 .ArrowDown {
-    top: 10%;
+    /* top: 10%; */
+    grid-column-start: 2;
+    grid-row-start: 3;
 }
 .ArrowLeft {
-    display: flex;
-    right: 55%;
-    top: 5%;
+    grid-column-start: 1;
+    grid-row-start: 2;
 }
 
 .ArrowRight {
     top: 5%;
     right: 45%;
+    grid-column-start: 3;
+    grid-row-start: 2;
 }
 
 .StartButton {

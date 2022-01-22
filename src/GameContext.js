@@ -135,7 +135,7 @@ export const GameProvider = ({children}) => {
                         });
                     }
                 }
-                dispatch({type: 'claimPrize', payload: {prizes: newPrizes, score: state.score + 100, time: state.time + 10}});
+                dispatch({type: 'claimPrize', payload: {prizes: newPrizes, score: state.score + parseInt(process.env.REACT_APP_PRIZE_POINTS), time: state.time + 10}});
             }
         }
     }
@@ -208,7 +208,7 @@ export const GameProvider = ({children}) => {
 
     let arrowButtons = Object.keys(KEY_DIRECTIONS).map((key, index) => {
         let direction = Object.values(KEY_DIRECTIONS)[index];
-    return <button key={key} className={"ArrowButton "+key} onClick={() => checkIfPlayerMoved(key)}>Move {direction}</button>
+    return <button key={key} className={key} onClick={() => checkIfPlayerMoved(key)}>Move {direction}</button>
     });
         
     return (
@@ -217,7 +217,7 @@ export const GameProvider = ({children}) => {
             isPlaying,
         }}>
             {children}
-            {state.isPlaying && !state.isPortraitMode ? arrowButtons : (!state.isPortraitMode) ? <button className="StartButton" onClick={() => {
+            {state.isPlaying && !state.isPortraitMode ? <div className="ArrowButton">{arrowButtons}</div> : (!state.isPortraitMode) ? <button className="StartButton" onClick={() => {
             playLevelMusic();
             dispatch({type: 'startGame', payload: {maze: new Maze(ROWS, COLUMNS)}})}}>Start!</button> : ''}
         </GameContext.Provider>
